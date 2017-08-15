@@ -1,8 +1,18 @@
+'use strict'
+
+function removeClass(selector, className) {
+    return selector.classList.remove(className);
+}
+
+function addClass(selector, className) {
+    return selector.classList.add(className);
+}
+
 var xmlhttp = new XMLHttpRequest();
 xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-        var data = JSON.parse(this.responseText);
-        var result = "",
+        var data = JSON.parse(this.responseText),
+            result = "",
             content = document.getElementById("content"),
             search = document.getElementById("search"),
             obj = data.response.docs;
@@ -19,40 +29,31 @@ xmlhttp.onreadystatechange = function() {
         }
         content.innerHTML = result;
 
-        function removeClass(selector, className) {
-            return selector.classList.remove(className);
-        }
-
-        function addClass(selector, className) {
-            return selector.classList.add(className);
-        }
-
         function searchValue() {
-            var searchStr = new RegExp(search.value.toLowerCase());
-            var item = document.getElementsByClassName("item");
+            var searchVal = search.value,
+                searchStr = new RegExp(searchVal, "i"),
+                item = document.getElementsByClassName("item");
 
             for (var i = 0; i < obj.length / 100; i++) {
                 removeClass(item[i], 'show')
-                if (obj[i].snippet.toLowerCase().match(searchStr) == search.value || obj[i].headline.main.toLowerCase().match(searchStr) == search.value) {
+                if (obj[i].snippet.toLowerCase().match(searchStr) == searchVal.toLowerCase() || obj[i].headline.main.toLowerCase().match(searchStr) == searchVal.toLowerCase()) {
                     addClass(item[i], 'show')
+
+                    // var old = JSON.stringify(data).replace(/null/g, '"#"'); //convert to JSON string
+                    // var newArray = JSON.parse(old); //convert back to array
+                    // var index = obj[i].snippet.indexOf(searchVal);
+
+                    // if (index >= 0) {
+                    //     obj[i].snippet.replace(obj[i].snippet, obj[i].snippet.substring(0, index) + "<span class='highlight'>" + obj[i].snippet.substring(index, index + searchVal.length) + "</span>" + obj[i].snippet.substring(index + searchVal.length));
+                    //     console.log(obj[i].snippet)
+                    // }
+
                 }
             }
         }
 
-        // function highlight(text) {
-        //     inputText = document.getElementById("inputText")
-        //     var innerHTML = inputText.innerHTML
-        //     var index = innerHTML.indexOf(text);
-        //     if (index >= 0) {
-        //         innerHTML = innerHTML.substring(0, index) + "<span class='highlight'>" + innerHTML.substring(index, index + text.length) + "</span>" + innerHTML.substring(index + text.length);
-        //         inputText.innerHTML = innerHTML
-        //     }
-
-        // }
-        //highlight("natalia")
-
         search.addEventListener("keyup", function() {
-            searchValue();
+            setTimeout(function() { searchValue() }, 1000);
         });
 
     }
