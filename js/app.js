@@ -16,7 +16,19 @@
                 result = "",
                 content = document.getElementById("content"),
                 search = document.getElementById("search"),
-                obj = data.response.docs;
+                obj = data.response.docs,
+                searchValue = function() {
+                    var searchVal = search.value,
+                        searchStr = new RegExp(searchVal, "i"),
+                        item = document.getElementsByClassName("item");
+
+                    for (var i = 0; i < obj.length / 100; i++) {
+                        addClass(item[i], ["hidden"]);
+                        if (obj[i].snippet.toLowerCase().match(searchStr) == searchVal.toLowerCase() || obj[i].headline.main.toLowerCase().match(searchStr) == searchVal.toLowerCase()) {
+                            removeClass(item[i], ["hidden"]);
+                        }
+                    }
+                };
 
             for (var i = 0; i < obj.length / 100; i++) {
                 result += '<div class="item">';
@@ -30,18 +42,7 @@
             }
             content.innerHTML = result;
 
-            function searchValue() {
-                var searchVal = search.value,
-                    searchStr = new RegExp(searchVal, "i"),
-                    item = document.getElementsByClassName("item");
 
-                for (var i = 0; i < obj.length / 100; i++) {
-                    addClass(item[i], ["hidden"]);
-                    if (obj[i].snippet.toLowerCase().match(searchStr) == searchVal.toLowerCase() || obj[i].headline.main.toLowerCase().match(searchStr) == searchVal.toLowerCase()) {
-                        removeClass(item[i], ["hidden"]);
-                    }
-                }
-            }
 
             search.addEventListener("keyup", function() {
                 setTimeout(function() { searchValue(); }, 2000);
