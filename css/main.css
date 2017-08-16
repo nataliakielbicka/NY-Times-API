@@ -51,13 +51,4 @@ p,
     display: inline-block;
     margin: 0 0 1em;
     width: 100%;
-    display: none;
-}
-
-.show {
-    display: inline-block;
-}
-
-.highlight {
-    background-color: yellow;
 }
